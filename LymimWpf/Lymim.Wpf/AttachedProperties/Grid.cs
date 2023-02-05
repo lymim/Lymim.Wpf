@@ -7,7 +7,10 @@ using System.Windows;
 
 namespace Lymim.Wpf.AttachProperties
 {
-    public class GridProps
+    /// <summary>
+    /// 应用在 System.Windows.Controls.Grid 上的附加属性 owner
+    /// </summary>
+    public class Grid
     {
         public static string GetColumns(DependencyObject obj) => (string)obj.GetValue(ColumnsProperty);
 
@@ -17,7 +20,7 @@ namespace Lymim.Wpf.AttachProperties
         /// Columns samples: 1|*|2*|Auto
         /// </summary>
         public static readonly DependencyProperty ColumnsProperty =
-            DependencyProperty.RegisterAttached("Columns", typeof(string), typeof(GridProps),
+            DependencyProperty.RegisterAttached("Columns", typeof(string), typeof(Grid),
                 new PropertyMetadata(null, OnColumnsPropertyChanged));
 
         private static void OnColumnsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -36,7 +39,7 @@ namespace Lymim.Wpf.AttachProperties
         /// Rows samples: 1|*|2*|Auto
         /// </summary>
         public static readonly DependencyProperty RowsProperty =
-            DependencyProperty.RegisterAttached("Rows", typeof(string), typeof(GridProps),
+            DependencyProperty.RegisterAttached("Rows", typeof(string), typeof(Grid),
                 new PropertyMetadata(null, OnRowsPropertyChanged));
 
         private static void OnRowsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -47,9 +50,9 @@ namespace Lymim.Wpf.AttachProperties
                 (grid, gridLength) => grid.RowDefinitions.Add(new RowDefinition { Height = gridLength }));
         }
 
-        private static void SetRowOrColumnDefinitions(DependencyObject obj, object newValue, Action<Grid> ClearDefs, Action<Grid, GridLength> AddDef)
+        private static void SetRowOrColumnDefinitions(DependencyObject obj, object newValue, Action<System.Windows.Controls.Grid> ClearDefs, Action<System.Windows.Controls.Grid, GridLength> AddDef)
         {
-            if (!(obj is Grid grid))
+            if (!(obj is System.Windows.Controls.Grid grid))
                 return;
 
             var lengthes = ParseLengthes(newValue.ToString());
@@ -67,10 +70,10 @@ namespace Lymim.Wpf.AttachProperties
         {
             var matchToConstructorList = new TupleList<string, RegexOptions, Func<string, GridLength>>
             {
-                { @"\d+(\.\d+)?", RegexOptions.None, str=> new GridLength(double.Parse(str), GridUnitType.Pixel) },
-                { @"\d+(\.\d+)?\*", RegexOptions.None, str=> new GridLength(double.Parse(str.Substring(0, str.Length - 1)), GridUnitType.Star) },
-                { @"\*", RegexOptions.None, str=> new GridLength(1, GridUnitType.Star) },
-                { @"Auto", RegexOptions.IgnoreCase, str=> new GridLength(1, GridUnitType.Auto) },
+                { @"^\d+(\.\d+)?$", RegexOptions.None, str=> new GridLength(double.Parse(str), GridUnitType.Pixel) },
+                { @"^\d+(\.\d+)?\*$", RegexOptions.None, str=> new GridLength(double.Parse(str.Substring(0, str.Length - 1)), GridUnitType.Star) },
+                { @"^\*$", RegexOptions.None, str=> new GridLength(1, GridUnitType.Star) },
+                { @"^Auto$", RegexOptions.IgnoreCase, str=> new GridLength(1, GridUnitType.Auto) },
             };
 
             GridLength? ParseGridLength(string lengthString)
