@@ -6,7 +6,7 @@
         xmlns:ly="http://wpf.lymim.com"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <ly:CustomControl1/>
+    <Grid ly:GridProps.Rows="*|*|*">
+        <ly:CustomControl1 Grid.Row="1"/>
     </Grid>
 </Window>

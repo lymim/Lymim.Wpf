@@ -11,4 +11,5 @@ using System.Windows.Markup;
 )]
 
 [assembly: XmlnsDefinition("http://wpf.lymim.com", "Lymim.Wpf")]
+[assembly: XmlnsDefinition("http://wpf.lymim.com", "Lymim.Wpf.AttachProperties")]
 [assembly: XmlnsPrefix("http://wpf.lymim.com", "ly")]
